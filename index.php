@@ -280,6 +280,58 @@ require_once 'scripts/pi-hole/php/gravity.php';
     <!-- /.col -->
 </div>
 <!-- /.row -->
+<div class="row">
+    <div class="<?php echo $tablelayout; ?>">
+        <div class="box" id="dhcp-leases">
+            <div class="box-header with-border">
+                <h3 class="box-title">Recent DHCP Leases</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dhcpTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Time <span id="timeSort"></span></th>
+                                <th onclick="sortTable(1)">Hostname <span id="hostnameSort"></span></th>
+                                <th onclick="sortTable(2)">IP Address <span id="ipSort"></span></th>
+                                <th onclick="sortTable(3)">MAC Address <span id="macSort"></span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            // Execute the shell command to get all DHCP leases sorted by last added time (newest first)
+                            $output = shell_exec('cat /etc/pihole/dhcp.leases | sort -k 1,1nr');
+                            $lines = explode("\n", trim($output));
+
+                            if (!empty($lines)) {
+                                foreach ($lines as $line) {
+                                    $columns = explode(" ", $line);
+                                    $timestamp = $columns[0];
+                                    $time = date('H:i:s', $timestamp);
+                                    $ipAddress = $columns[2];
+                                    echo "<tr>";
+                                    echo "<td data-timestamp=\"$timestamp\">$time</td>";
+                                    echo "<td>" . ($columns[3] != '*' ? $columns[3] : "Unknown") . "</td>";
+                                    echo "<td><a href=\"http://pihole.home/admin/queries.php?client=$ipAddress\">$ipAddress</a></td>";
+                                    echo "<td>" . $columns[1] . "</td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='4'>No data available</td></tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+</div>
+<!-- /.row -->
+
 
 <script src="<?php echo fileversion('scripts/pi-hole/js/index.js'); ?>"></script>
 
