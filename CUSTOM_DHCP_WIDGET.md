@@ -2,7 +2,7 @@
 
 This enhancement adds a custom DHCP leases widget to the Pi-hole dashboard. The widget displays real-time information about DHCP leases, including sortable columns for time, hostname, IP address, and MAC address. The goal of this widget is to provide more visibility into the devices on your network and their DHCP assignments.
 
-![alt text](image.png)
+![alt text](img/image.png)
 
 ## Features:
 - Sortable columns for Time, Hostname, IP Address, and MAC Address.
